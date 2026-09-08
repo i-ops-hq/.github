@@ -33,13 +33,41 @@ No account, no key, no network call, and no model decides any of it.
 
 ---
 
-### The three packages
+### These are layers, not products
 
-| | |
-|---|---|
-| **[assurance-cli](https://github.com/i-ops-hq/assurance-cli)** · [PyPI](https://pypi.org/project/assurance-cli/) | The checks as a command. `diff` for any two sets, `check` for a series on disk, a baseline for what changed while you weren't looking. Exit codes for CI. |
-| **[assurance-core](https://github.com/i-ops-hq/assurance-core)** · [PyPI](https://pypi.org/project/assurance-core/) | The arithmetic underneath. Pure Python, zero dependencies, and **no model decides any of it** — enforced by tests that walk the source and fail on a model import. |
-| **[assurance-mcp](https://github.com/i-ops-hq/assurance-mcp)** · [PyPI](https://pypi.org/project/assurance-mcp/) | The same checks as MCP tools. An agent can't audit its own reading; this answers it from outside. Read-only by construction, proven by a test. |
+I-Ops is one system. What is published here are **individual layers of it**, taken out one at a time
+so the claim each one makes can be checked without installing anything else — and so people who have
+no interest in the rest can still use the part that answers their question.
+
+Most of the system is not here and may never be. What is here is what could stand alone and be
+argued with.
+
+| layer | the question it answers | who decides |
+|---|---|---|
+| **[assurance](https://github.com/i-ops-hq/assurance)** · [PyPI](https://pypi.org/project/assurance-cli/) | What was supposed to be there, and what silently changed? | arithmetic over files |
+| **[assurance-budget](https://github.com/i-ops-hq/assurance-budget)** · [PyPI](https://pypi.org/project/assurance-budget/) | Where did a run's budget go, and where did the loop go nowhere? | ceilings a caller cannot raise |
+| **[assurance-authority](https://github.com/i-ops-hq/assurance-authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
+| **[iops-rooms](https://github.com/i-ops-hq/iops-rooms)** · [npm](https://www.npmjs.com/package/iops-rooms) | Who did this, and which agent co-signed it? | `git` trailers you already have |
+
+`assurance-core` and `assurance-mcp` were published separately first and now live inside
+**assurance**. Their repositories are archived and their packages still work.
+
+**No model decides any of it.** That is the property the four have in common and the reason they are
+worth publishing separately: each is a fact you can recompute yourself.
+
+---
+
+### Why any of this is public
+
+Not as a funnel. These are early, and the fastest way to find out where a claim is thin is to let
+people who did not write it try to break it.
+
+So: **use them, tell us where they are wrong, and argue with the framing.** Issues are open on every
+repository. A criticism that lands changes the product — several already have, and the packages
+carry the corrections in their changelogs rather than quietly in a later version.
+
+That is how the work gets better, and it is how the field gets better. Nobody is served by a
+category everyone describes and nobody checks.
 
 ---
 
