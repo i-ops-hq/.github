@@ -45,12 +45,14 @@ argued with.
 | layer | the question it answers | who decides |
 |---|---|---|
 | **[assurance](https://github.com/i-ops-hq/assurance)** · [PyPI](https://pypi.org/project/assurance-cli/) | What was supposed to be there, and what silently changed? | arithmetic over files |
-| **[assurance-budget](https://github.com/i-ops-hq/assurance-budget)** · [PyPI](https://pypi.org/project/assurance-budget/) | Where did a run's budget go, and where did the loop go nowhere? | ceilings a caller cannot raise |
-| **[assurance-authority](https://github.com/i-ops-hq/assurance-authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
+| **[assurance-budget](https://github.com/i-ops-hq/assurance/tree/main/packages/budget)** · [PyPI](https://pypi.org/project/assurance-budget/) | Where did a run's budget go, and where did the loop go nowhere? | ceilings a caller cannot raise |
+| **[assurance-authority](https://github.com/i-ops-hq/assurance/tree/main/packages/authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
 | **[iops-rooms](https://github.com/i-ops-hq/iops-rooms)** · [npm](https://www.npmjs.com/package/iops-rooms) | Who did this, and which agent co-signed it? | `git` trailers you already have |
 
-`assurance-core` and `assurance-mcp` were published separately first and now live inside
-**assurance**. Their repositories are archived and their packages still work.
+All four live in **[assurance](https://github.com/i-ops-hq/assurance)** — one repository, five
+packages. `assurance-core`, `assurance-mcp`, `assurance-budget` and `assurance-authority` were
+published from repositories of their own first; those are archived rather than deleted, so their
+URLs still resolve, and every PyPI package name is unchanged.
 
 **No model decides any of it.** That is the property the four have in common and the reason they are
 worth publishing separately: each is a fact you can recompute yourself.
