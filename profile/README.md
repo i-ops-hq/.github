@@ -47,14 +47,17 @@ argued with.
 | **[assurance](https://github.com/i-ops-hq/assurance)** · [PyPI](https://pypi.org/project/assurance-cli/) | What was supposed to be there, and what silently changed? | arithmetic over files |
 | **[assurance-budget](https://github.com/i-ops-hq/assurance/tree/main/packages/budget)** · [PyPI](https://pypi.org/project/assurance-budget/) | Where did a run's budget go, and where did the loop go nowhere? | ceilings a caller cannot raise |
 | **[assurance-authority](https://github.com/i-ops-hq/assurance/tree/main/packages/authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
+| **[assurance-deps](https://github.com/i-ops-hq/assurance/tree/main/packages/deps)** · [PyPI](https://pypi.org/project/assurance-deps/) | What will a `pip install` or `npm install` execute, and what could not be read? | reading archives, never running them |
 | **[iops-rooms](https://github.com/i-ops-hq/iops-rooms)** · [npm](https://www.npmjs.com/package/iops-rooms) | Who did this, and which agent co-signed it? | `git` trailers you already have |
+| **[rollcall](https://github.com/i-ops-hq/rollcall)** · not published yet | What AI processes are running here, and what could a stop not reach? | the process table, read twice |
 
-All four live in **[assurance](https://github.com/i-ops-hq/assurance)** — one repository, five
+The first four live in **[assurance](https://github.com/i-ops-hq/assurance)** — one repository, six
 packages. `assurance-core`, `assurance-mcp`, `assurance-budget` and `assurance-authority` were
-published from repositories of their own first; those are archived rather than deleted, so their
-URLs still resolve, and every PyPI package name is unchanged.
+published from repositories of their own first. **Those repositories are private as of 2026-09-11**,
+so their old URLs no longer resolve; the history and the releases moved here and to PyPI, and every
+PyPI package name is unchanged.
 
-**No model decides any of it.** That is the property the four have in common and the reason they are
+**No model decides any of it.** That is the property they have in common and the reason they are
 worth publishing separately: each is a fact you can recompute yourself.
 
 ---
@@ -104,7 +107,13 @@ not a runtime — you still build the machinery that feeds it facts.
 a denominator nobody can argue with. And coverage over the wrong scope is still coverage over the
 wrong scope, which is why every result states how it reached its denominator.
 
-**Nobody outside this company has used any of it yet.** We'd rather say so here than have you find
-out after installing.
+**Somebody outside this company has now used it, once, and it went badly in a useful way.** One
+reader installed the published packages, ran them against their own data, and filed twelve
+reproducible defects across two repositories in an afternoon — every one of them a case where the
+output was confident and wrong. All twelve are fixed and the changelogs say what was wrong rather
+than what was added.
+
+That is one person, not adoption, and we would rather say that than imply more. What it does mean is
+that these have now met somebody who did not write them.
 
 **[i-ops.dev](https://i-ops.dev)** · hello@i-ops.dev
