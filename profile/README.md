@@ -49,7 +49,7 @@ argued with.
 | **[assurance-authority](https://github.com/i-ops-hq/assurance/tree/main/packages/authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
 | **[assurance-deps](https://github.com/i-ops-hq/assurance/tree/main/packages/deps)** · [PyPI](https://pypi.org/project/assurance-deps/) | What will a `pip install` or `npm install` execute, and what could not be read? | reading archives, never running them |
 | **[iops-rooms](https://github.com/i-ops-hq/iops-rooms)** · [npm](https://www.npmjs.com/package/iops-rooms) | Who did this, and which agent co-signed it? | `git` trailers you already have |
-| **[rollcall](https://github.com/i-ops-hq/rollcall)** · not published yet | What AI processes are running here, and what could a stop not reach? | the process table, read twice |
+| **[rollcall](https://github.com/i-ops-hq/iops-rollcall)** · not published yet | What AI processes are running here, and what could a stop not reach? | the process table, read twice |
 
 The first four live in **[assurance](https://github.com/i-ops-hq/assurance)** — one repository, six
 packages. `assurance-core`, `assurance-mcp`, `assurance-budget` and `assurance-authority` were
