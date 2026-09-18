@@ -49,13 +49,23 @@ argued with.
 | **[assurance-authority](https://github.com/i-ops-hq/assurance/tree/main/packages/authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
 | **[assurance-deps](https://github.com/i-ops-hq/assurance/tree/main/packages/deps)** · [PyPI](https://pypi.org/project/assurance-deps/) | What will a `pip install` or `npm install` execute, and what could not be read? | reading archives, never running them |
 | **[iops-rooms](https://github.com/i-ops-hq/iops-rooms)** · [npm](https://www.npmjs.com/package/iops-rooms) | Who did this, and which agent co-signed it? | `git` trailers you already have |
-| **[rollcall](https://github.com/i-ops-hq/iops-rollcall)** · not published yet | What AI processes are running here, and what could a stop not reach? | the process table, read twice |
+| **[rollcall](https://github.com/i-ops-hq/iops-rollcall)** · [npm](https://www.npmjs.com/package/iops-rollcall) | What AI processes are running here, and what could a stop not reach? | the process table, read twice |
 
 The first four live in **[assurance](https://github.com/i-ops-hq/assurance)** — one repository, six
 packages. `assurance-core`, `assurance-mcp`, `assurance-budget` and `assurance-authority` were
 published from repositories of their own first. **Those repositories are private as of 2026-09-11**,
 so their old URLs no longer resolve; the history and the releases moved here and to PyPI, and every
 PyPI package name is unchanged.
+
+**The coverage check also runs in CI**, as a GitHub Action that fails the build when a dated series
+has a gap. It also fails when nothing could be checked at all, because a green tick on nothing
+checked is the thing it exists to prevent.
+
+```yaml
+- uses: i-ops-hq/assurance/actions/coverage@coverage-action-v1.0.0
+  with:
+    folder: reports
+```
 
 **No model decides any of it.** That is the property they have in common and the reason they are
 worth publishing separately: each is a fact you can recompute yourself.
@@ -100,7 +110,7 @@ claims that hold beat broader claims that sound better.**
 
 ### Honestly, where this is
 
-Days old, extracted from a working product, which is not the same as proven. It's a decision layer,
+New, and extracted from a working product, which is not the same as proven. It's a decision layer,
 not a runtime — you still build the machinery that feeds it facts.
 
 **It will not invent your expected set.** That's deliberate: a denominator a tool chooses for you is
