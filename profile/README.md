@@ -67,6 +67,22 @@ checked is the thing it exists to prevent.
     folder: reports
 ```
 
+**So does attribution.** On a pull request, the rooms action counts the commits that record an
+agent in a `Co-Authored-By` trailer and comments once, edited in place. It prints counts, never a
+bare percentage, and says nothing when nothing was attributed. The caveat travels in the comment:
+a commit with no trailer means none was recorded, not that no agent was used.
+
+```yaml
+permissions:
+  contents: read
+  pull-requests: write
+
+steps:
+  - uses: actions/checkout@v4
+    with: { fetch-depth: 0 }     # it compares a branch against a base
+  - uses: i-ops-hq/iops-rooms/actions/attribution@attribution-action-v1.0.0
+```
+
 **No model decides any of it.** That is the property they have in common and the reason they are
 worth publishing separately: each is a fact you can recompute yourself.
 
