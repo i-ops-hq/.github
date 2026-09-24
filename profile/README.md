@@ -3,143 +3,95 @@
 **An agent can decide what to do. It shouldn't also decide whether it was allowed to, whether it
 actually did it, or whether it worked.**
 
-We build the layer that answers those independently of the worker, and we publish the parts that
-make the claim checkable.
+We build the layer that answers those questions independently of the agent doing the work. We publish
+the parts that make that claim checkable. No model decides any of it.
 
 ---
 
-### Every tool call returned 200. The answer was still built on two thirds of the data.
-
-Groundedness checks the **output against the input**. Almost nothing checks the **input against the
-question** — so a retriever returns 4 of the 9 documents a question spans, the model writes a fluent,
-fully grounded answer, every span is green, and the answer is wrong.
+### Your agent says it's done. What didn't it check?
 
 ```bash
-pip install assurance-cli
-
-assurance diff --expected corpus.txt --found retrieved.json \
-  --scope "documents the question spans" --where "the retrieved set" --fail-on-gap
-```
-```
-2 of 5 documents the question spans — not in the retrieved set: doc-2, doc-3, doc-5
-also present and not expected: doc-9
+uvx assurance audit
 ```
 
-Keys are anything you can name, so the same command gates a **code review** against
-`git diff --name-only`, an **ETL run** against its declared partitions, an **eval** against its
-declared cases, or a **compliance pull** against the controls in scope.
+Run it in any project where you've used Claude Code. It reads the session and reports what actually
+happened. Here it is on a sample session where the agent finished with *"All done — the totals are
+correct now."*:
 
-No account, no key, no network call, and no model decides any of it.
+```
+Claude Code session demo-8f2 — 13 min in /home/you/my-app
+10 tool calls, 3 failed — Bash 6, Edit 2, Grep 1, Read 1
+
+  Looped: 3 rounds of Bash `pytest -q tests/test_invoice.py` failing the same way, with nothing new read
+  Edited without reading it first: src/billing/rates.py
+  After the last edit (14:09): no test or check command ran
+  Not classified: 2 shell commands, so whether they read, wrote or tested anything is unknown.
+```
+
+The last line matters most. When it can't tell, it says so. **Silence is not a pass.**
+
+→ **[i-ops-hq/assurance](https://github.com/i-ops-hq/assurance)** · `pip install assurance`
 
 ---
 
-### These are layers, not products
+### What's published
 
-I-Ops is one system. What is published here are **individual layers of it**, taken out one at a time
-so the claim each one makes can be checked without installing anything else — and so people who have
-no interest in the rest can still use the part that answers their question.
+These are **individual layers** of I-Ops. Each one is taken out on its own so that the claim it makes
+can be checked without installing anything else.
 
-Most of the system is not here and may never be. What is here is what could stand alone and be
-argued with.
-
-| layer | the question it answers | who decides |
+| | the question it answers | who decides |
 |---|---|---|
-| **[assurance](https://github.com/i-ops-hq/assurance)** · [PyPI](https://pypi.org/project/assurance-cli/) | What was supposed to be there, and what silently changed? | arithmetic over files |
-| **[assurance-budget](https://github.com/i-ops-hq/assurance/tree/main/packages/budget)** · [PyPI](https://pypi.org/project/assurance-budget/) | Where did a run's budget go, and where did the loop go nowhere? | ceilings a caller cannot raise |
-| **[assurance-authority](https://github.com/i-ops-hq/assurance/tree/main/packages/authority)** · [PyPI](https://pypi.org/project/assurance-authority/) | May this task proceed, for the person who asked? | policy, default deny |
-| **[assurance-deps](https://github.com/i-ops-hq/assurance/tree/main/packages/deps)** · [PyPI](https://pypi.org/project/assurance-deps/) | What will a `pip install` or `npm install` execute, and what could not be read? | reading archives, never running them |
+| **[assurance](https://github.com/i-ops-hq/assurance)** · [PyPI](https://pypi.org/project/assurance/) | What did the agent session do, and what did it skip? Did the work cover everything it should have? | arithmetic over files and transcripts |
+| **[assurance-budget](https://github.com/i-ops-hq/assurance/tree/main/packages/budget)** | Where did a run's budget go, and where did it loop going nowhere? | limits the agent can't raise |
+| **[assurance-authority](https://github.com/i-ops-hq/assurance/tree/main/packages/authority)** | May this task go ahead for the person who asked? | policy, default deny |
+| **[assurance-deps](https://github.com/i-ops-hq/assurance/tree/main/packages/deps)** | What will `pip install` or `npm install` run, and what couldn't be read? | reading archives, never running them |
+| **[assurance-mcp](https://github.com/i-ops-hq/assurance/tree/main/packages/mcp)** | The same checks as read-only MCP tools, limited to folders you grant | your config, not the model |
 | **[iops-rooms](https://github.com/i-ops-hq/iops-rooms)** · [npm](https://www.npmjs.com/package/iops-rooms) | Who did this, and which agent co-signed it? | `git` trailers you already have |
-| **[rollcall](https://github.com/i-ops-hq/iops-rollcall)** · [npm](https://www.npmjs.com/package/iops-rollcall) | What AI processes are running here, and what could a stop not reach? | the process table, read twice |
+| **[rollcall](https://github.com/i-ops-hq/iops-rollcall)** · [npm](https://www.npmjs.com/package/iops-rollcall) | What AI processes are running here, and what couldn't a stop reach? | the process table, read twice |
 
-The first four live in **[assurance](https://github.com/i-ops-hq/assurance)** — one repository, six
-packages. `assurance-core`, `assurance-mcp`, `assurance-budget` and `assurance-authority` were
-published from repositories of their own first. **Those repositories are private as of 2026-09-11**,
-so their old URLs no longer resolve; the history and the releases moved here and to PyPI, and every
-PyPI package name is unchanged.
+The assurance packages all live in **[one repository](https://github.com/i-ops-hq/assurance)**, and
+`pip install assurance` installs all the command-line tools. Their earlier standalone repositories
+are private as of 2026-09-11; the history and releases moved there, and every PyPI name is unchanged.
 
-**The coverage check also runs in CI**, as a GitHub Action that fails the build when a dated series
-has a gap. It also fails when nothing could be checked at all, because a green tick on nothing
-checked is the thing it exists to prevent.
-
-```yaml
-- uses: i-ops-hq/assurance/actions/coverage@coverage-action-v1.0.0
-  with:
-    folder: reports
-```
-
-**So does attribution.** On a pull request, the rooms action counts the commits that record an
-agent in a `Co-Authored-By` trailer and comments once, edited in place. It prints counts, never a
-bare percentage, and says nothing when nothing was attributed. The caveat travels in the comment:
-a commit with no trailer means none was recorded, not that no agent was used.
-
-```yaml
-permissions:
-  contents: read
-  pull-requests: write
-
-steps:
-  - uses: actions/checkout@v4
-    with: { fetch-depth: 0 }     # it compares a branch against a base
-  - uses: i-ops-hq/iops-rooms/actions/attribution@attribution-action-v1.0.0
-```
-
-**No model decides any of it.** That is the property they have in common and the reason they are
-worth publishing separately: each is a fact you can recompute yourself.
-
----
-
-### Why any of this is public
-
-Not as a funnel. These are early, and the fastest way to find out where a claim is thin is to let
-people who did not write it try to break it.
-
-So: **use them, tell us where they are wrong, and argue with the framing.** Issues are open on every
-repository. A criticism that lands changes the product — several already have, and the packages
-carry the corrections in their changelogs rather than quietly in a later version.
-
-That is how the work gets better, and it is how the field gets better. Nobody is served by a
-category everyone describes and nobody checks.
+**In CI, too.** Two GitHub Actions:
+- `i-ops-hq/assurance/actions/coverage` fails the build when a dated series of reports has a gap. It also fails
+  when nothing could be checked at all.
+- `i-ops-hq/iops-rooms/actions/attribution` counts the commits that record an agent in a
+  `Co-Authored-By` trailer on a pull request, and posts one comment that it edits in place.
 
 ---
 
 ### A gap is six different facts, not one
 
 *Nothing matched it* → chase the owner. *A tombstone says it was here* → that's an incident. *Two
-candidates* → a human picks, because picking invents provenance. *Present and unreadable* → untested,
-not absent. *Not cleared to open it* → escalate the **task**, never the answer. *The listing hit a
-cap* → the **denominator** is wrong, so a capped "24 of 24, complete" is worse than no number at all.
+candidates* → a human picks, because picking would invent provenance. *Present but unreadable* →
+untested, not absent. *Not cleared to open it* → escalate the **task**, never the answer. *The
+listing hit a cap* → the **denominator** is wrong, so a capped "24 of 24, complete" is worse than no
+number at all.
 
 One `missing` bucket throws away the only thing anyone needs from the result: what to do next.
 
----
+### Why not just ask another model?
 
-### Why not just ask another model
+Cross-verification isn't verification. Four agents agreeing tells you the models agree. It doesn't
+tell you that the draft exists, or that two months of reports were never opened.
 
-Cross-verification isn't verification. Four agents agreeing tells you the models agree — not that
-the draft exists, or that two months were never opened.
-
-So the vocabulary stays narrow on purpose. `complete_unverified` rather than `verified_complete`
-when no verifier exists. *"22 of 24 were observed"* rather than *"two are missing."* **Narrower
-claims that hold beat broader claims that sound better.**
+So the wording stays narrow on purpose: *"22 of 24 were observed"*, not *"two are missing."*
+**Narrower claims that hold beat broader claims that sound better.**
 
 ---
 
 ### Honestly, where this is
 
-New, and extracted from a working product, which is not the same as proven. It's a decision layer,
-not a runtime — you still build the machinery that feeds it facts.
+New, and extracted from a working product, which is not the same as proven.
 
-**It will not invent your expected set.** That's deliberate: a denominator a tool chooses for you is
-a denominator nobody can argue with. And coverage over the wrong scope is still coverage over the
-wrong scope, which is why every result states how it reached its denominator.
+One outside reader installed the packages, ran them on their own data, and filed twelve reproducible
+defects in an afternoon. Every one was a case where the output was confident and wrong. All twelve
+are fixed, and the changelogs say what was wrong rather than what was added. That is one person, not
+adoption, and we'd rather say so.
 
-**Somebody outside this company has now used it, once, and it went badly in a useful way.** One
-reader installed the published packages, ran them against their own data, and filed twelve
-reproducible defects across two repositories in an afternoon — every one of them a case where the
-output was confident and wrong. All twelve are fixed and the changelogs say what was wrong rather
-than what was added.
-
-That is one person, not adoption, and we would rather say that than imply more. What it does mean is
-that these have now met somebody who did not write them.
+**Use them, tell us where they're wrong, and argue with the framing.**
+[Report a wrong answer](https://github.com/i-ops-hq/assurance/issues/new?template=wrong-answer.yml) ·
+[Discussions](https://github.com/orgs/i-ops-hq/discussions)
 
 **[i-ops.dev](https://i-ops.dev)** · hello@i-ops.dev
