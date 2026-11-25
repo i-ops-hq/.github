@@ -8,6 +8,24 @@ the parts that make that claim checkable. No model decides any of it.
 
 ---
 
+### What we are building, and where it actually is
+
+**Vinci** is the runtime: it works out what a task needs, acquires what is missing under the
+company's own permissions, holds consequential actions for approval before they happen, and then
+checks the result against conditions written down **before** the run by code that is not the worker.
+
+| | |
+|---|---|
+| **Ships today** | The checks below. Open source, Apache-2.0, computed on your machine. Every one is a claim you can run rather than read. |
+| **Not yet** | The runtime itself. A signed, notarised macOS application on a live updater, in private testing. [Request access](https://i-ops.dev/early-access/). |
+
+The layers below are not a toolkit. **They are the parts of that runtime whose claims can be checked
+without it** — taken out on their own, published, and left where anyone can disagree with them. The
+reason to publish them separately is the same reason the runtime exists: a check you have to trust
+is not a check.
+
+---
+
 ### Your agent says it's done. What didn't it check?
 
 ```bash
@@ -34,10 +52,10 @@ The last line matters most. When it can't tell, it says so. **Silence is not a p
 
 ---
 
-### What's published
+### The layers, published
 
-These are **individual layers** of I-Ops. Each one is taken out on its own so that the claim it makes
-can be checked without installing anything else.
+Each one is taken out of the runtime on its own, so that the claim it makes can be checked without
+installing anything else — and so that **nothing here asks you to take our word for it.**
 
 | | the question it answers | who decides |
 |---|---|---|
